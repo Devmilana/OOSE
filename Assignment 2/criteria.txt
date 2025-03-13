@@ -1,0 +1,139 @@
+**  18739376                **
+
+**  PRASHANTHA FERNANDO     ** 
+
+**  COMP2003 ASSIGNMENT 2   **
+
+
+
+** BIKE SHOP SIMULATION APP  **
+
+This assignment required me to construct a program designed to simulate the day-to-day operations of a bike shop, handling various events such as
+deliveries, drop-offs, purchases and pickups. The primary goal of the program was to leverage the use of Observer and State patterns to the program
+to read the simulated inputs randomly generated from a file and apply these inputs into the simulation and run the results accordingly. 
+
+The application will output the results printed to the console onto a text file simultaneously as well as maintain logs for debugging purposes.
+
+The entire software package contains 21 files in total.
+
+1. App - Entry point of program which initalises the bike shop through the bike factory
+
+2. BikeShopInput - Class file containing simulated inputs which can be given randomly
+
+3. FileIO - Class file for handling the writing and saving of statements to the sim_output text file
+
+4. Bike - Class for a bike object, which includes the getters and setters for setting up the object values
+
+5. BikeShop - Main Class file which contains the core logic of understanding the given inputs and processing the results
+
+6. BikeShopFactory - Class file whcih creates an instance of a bike shop
+
+7. BikeShopStatus - Class file that encapsulates the current state of the bike shop to maintain cleaner code and easier observation of information
+
+8. State - Interface for implementing different states for bike objects
+
+9. AvailableState - Class file which sets the state of a bike object to the available state 
+
+10. AwaitingPickUpState - Class file which sets the state of a bike object to the awaiting pick-up state
+
+11. Servicing state - Class file which sets the state of a bike object to the servicing state 
+
+12. Observer - Interface for defining the methods which a observer class must implement
+
+13. ObserverOperations - Class file for managing a list of observers and provides methods for notifying them of events and shop status updates
+
+14. BikeShopObserver - Concrete implmentation of the Observer interface and observes the BikeShop class and updates itself and prints statements
+                       based on the status of the bike shop
+
+15 - 21 BikeShopException and subclasses - These are custom made exception classes to handle bike shop related exceptions
+
+
+
+**  PROGRAM FUNCTION OVERVIEW  **
+
+The simulation program runs through the main app which initalises an instance of the bike shop through the use of the bike shop factory. This bike
+shop is set up with intial values necessary for the simulation.
+
+The app class contains a loop which calls upon the simulateDay() method within the BikeShop class which in itself contains all the necessary methods
+to run each day's activties
+
+Each day, the inputs given by the BikeShopInput file are processes and functions carried out accordingly. For example, the bike shop can be simulated
+to make a purchase of 10 new bikes or take in a bike for repairs or sell bikes online or in store. Each of these events are handled accordingly
+within the BikeShop class and appropriate variables updated. Statements for each day are printed and logged to an output and log file to analyse 
+and debug if necessary.
+
+This process will continue for as many days as the user requires and the simulation can be ended through pressing the 'Enter' key.
+
+At this point, the simulation will end with a set of final statements showing the total amount of statements and total failed messages the simulation
+encountered.
+
+
+
+**  USE OF THE FACTORY PATTERN  **
+
+The BikeShopFactory class is responsible for creating an instance of the BikeShop class when the main app calls upon it. It entirely encapsulates the
+creation logic and ensures that all the necessary components for the a bike shop are properly initalised and set up. The use of such a factory class
+makes sure that all the dependencies of the BikeShop class are initalised at a single place which allows for easier change and maintenance by decoupling
+the creation of the BikeShop from its usage. This also means that if necessary, multiple instances of a bike shop can be created easily.
+
+
+
+**  USE OF CUSTOM EXCEPTION HANDLING CLASSES  **
+
+I have created custom exception handling classes primarily because they cover bike shop specific issues making the code easier to read and understand.
+Furthemore, it makes it easier to log, write and print these exceptions in a cleaner manner and prevents the use of generic exceptions that may have
+no meaning to a user of the program.
+
+
+
+** CRITERIA E - USE OF THE OBSERVER PATTERN  **
+
+In line with the assignment requirements, I have utilised an observer pattern to monitor changes in the bike shop's status and events.
+
+This pattern in particular is used so that when one object changes its state, all its dependencies are notified and updated automatically.
+The pattern allows the BikeShop class to communicate changes in its state to observer objects without directly coupling to them. 
+
+An Observer interface defines the methods update(String event) and updateStatus(T status), and the ObserverOperations class, manages a 
+list of observers and contains methods which allow observers to be notfied of events and status changes. The BikeShopObserver class implements the 
+Observer interface and is used to handle updates from the BikeShop class. Within the BikeShop class, an instance of ObserverOperations is created, 
+and a BikeShopObserver is added to it. 
+
+During the simulation, the BikeShop class acts as the concrete subject and holds an instance of the ObserverOperations which maintains a list of 
+observers. The BikeShopObserver implements the observer interface to observe any changes in the BikeShop class. Specifically, these observed changes
+are the state of the entire bike shop at the start of each day. Each day when the BikeShop class processes events and changes its state, it creates 
+a BikeShopStatus object to hold the current state of the bike shop. I made a BikeShopStatus so as to encapsulate all the status changes into one
+object for clarity, efficiency and easier maintainability of the code. Once the status is created, the observers are notified through the use of 
+observer methods and the BikeShopStatus object passed to them. The list of observers is iterated through and their updatestatus methods are called
+which will read the bike shop's status and print the status to the console. In a similar way, at the end of the simulation, observers are called to 
+observe the total messages and failures counted and these statements are also printed to the console by the observers.
+
+This implementation of an observer pattern ensures that the bikeshop is only responsible for maintaining its state while the observer is in charge
+of reacting to these states further ensuring the decoupling of responsibilities. Furthemore, observers can be added or removed dynamically at runtime.
+
+
+
+** CRITERIA F - USE OF THE STATE PATTERN  **
+
+The state pattern in this program is used primarily to model a bike's state within the bike shop and help make aware of the program and user of 
+the behaviour of each bike. This is done through the creation of a state interface which defines a common interface for all states. Each of the
+concrete state classes implement this state interface and updates a bike object's reference state. Since each of the bike object will go through 
+either an available, servicing or awaiting state, each with its own behaviour and logic decsions, a state pattern was used to manage and 
+encapsulate their states allowing their behaviors to change dynamically based on their current state. 
+
+In the BikeShop class, when events such as bike drop-off, pickup, or delivery occur, the bike's state is changed by setting a new state
+instance (e.g., new ServicingState()). Whenever the state of a bike is changed, the concrete classes will print a statement highlighting this change
+such that the user is aware of the changes. 
+
+This design pattern provides a easy way to track the different types of bikes present in the store and manage their behaviour and logic 
+within the store. Applying a state pattern also makes it easier to add new states, and modify existing ones without altering the core logic of the 
+bike or bike shop classes. It also ensures that the correct behavior is executed for each bike's state, simplifying the overall management of bike 
+statuses within the shop.
+
+
+
+** CONCLUDING REMARKS  **
+
+The observer pattern ensures that daily changes in the bike shop's status are communicated semalessly to observers and that they respond consistently
+and efficiently to changes in state. The state pattern allows bike behaviours to be adjusted dynamically and track their states across the shop's 
+lifetime. The use of these patterns in conjucntion with one another as well as utilising good OOSE concepts allows this app to successfully 
+simulate the day-to-day activities of a simple bike shop.

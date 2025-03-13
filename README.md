@@ -2,9 +2,7 @@
 
 Part of my Software Engineering degree at Curtin University Colombo in 2024.
 
-This unit focused on **object-oriented design patterns** and **UML-based software design**. My final mark was **85**.
-
-There’s no proper commit history because it wasn’t developed using GitHub.
+This unit focused on **object-oriented design patterns** and **UML-based software design**. My final mark was **85%**.
 
 ---
 

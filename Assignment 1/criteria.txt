@@ -1,0 +1,146 @@
+**  18739376                **
+
+**  PRASHANTHA FERNANDO     ** 
+
+**  COMP2003 ASSIGNMENT 1   **
+
+
+
+** WORK BREAKDOWN STRUCTURE EFFORT ESTIMATION APP  **
+
+This assignment required me to construct a Work Breakdown Structure (WBS) Effort Estimation program which can be used as a tool
+to help other software engineers perform work planning and effort estimation. 
+
+The application will both load and save a data file containing a hierachichal WBS and allow the user to add effort estimations for the tasks present.
+Furthermore, it has different strategies for estimation the effort which the user can select when deciding upon efforts for tasks.
+
+The entire software package contains 11 files in total.
+
+1. WBSApp - Main class file and contains the menu and main user interaction code
+
+2. WBSReader - Class file for handling the reading of a WBS of appropriate format
+
+3. WBSSaver - Class file for handling the saving of the opened WBS once estimations are complete
+
+4. Task - Abstract class file for modelling tasks
+
+5. CompoundTask - Class file for modelling tasks which contain subtasks
+
+6. LeafTask - Class file for modelling tasks which do not contain any subtasks
+
+7. ConfigureEstimate - Class file for handling the configuration of estimation strategies and updating of efforts into tasks
+
+8. ReconcilliationStrategy - Interface for implementing different estimation strategies
+
+9. TakeHighestEstimate - Class file which uses the ReconcilliationStrategy interface for setting the effort of a task based on the 
+                         highest given estimate 
+
+10. TakeMedianEstimate - Class file which uses the ReconcilliationStrategy interface for setting the effort of a task based on the 
+                         median of given estimates
+
+11. DiscussAndReviseEstimate - Class file which uses the ReconcilliationStrategy interface for setting the effort through user discussion and revision
+
+
+
+**  PROGRAM FUNCTION OVERVIEW  **
+
+The application begins by reading a text file containing a WBS in hierachichal format. The file name is provided by the user in the command line
+interface. In order to display the WBS in a hierachichal manner, a root node is first created, modelled after a compound task. All future tasks will be 
+added to and built up from this root. The reader will parse the provided data file to identify a task's Parent ID, ID, Description and Effort (if present).
+
+Due to the nature of how the data is provided in the data file, a leaf task (task with no other subtasks) will always have a length of 4 (4 fields),
+whereas a compound task (task that is broken up to other tasks) will have 3 fields (a compound task will NOT have an effort field). Based on this
+and by checking if a task has a non-existent, null or specified effort field, I have implemented the logic to parse the data file and categorise the
+tasks into said compound tasks and leaf tasks. 
+
+These tasks are put into a task map which makes it easier to access and modify a task's parameter as a task can be easily identified using its 
+unique ID.
+
+To build up a hierachichal structure to display, the tasks are also added to the aforementioned root tree structure. The logic first checks if the task
+has a parent ID, and if not, they are added directly to the root. If a parent ID is present, it checks if the parent ID is an instance of a compound task
+before adding it as a child task of its identified parent task.
+
+Throughout the parsing, the total effort from the tasks identified are calculated as well as the number of tasks with non-specified efforts (to indetify
+the number of unknown tasks).
+
+After successfully reading the data file and populating the tree and task map with the tasks, the tree is iterated displayed to the user in the menu
+in a hierachichal format.
+
+Now within the menu, the user is able to estimate the effort for a task, configure the type of estimation strategy or exit the app.
+
+The default estimation strategy is set to use a Disscuss and Revise estimate strategy with a default number of estimators set to 3. The user is able to
+change the estimation strategy and the number of estimators to be used through the menu.
+
+When the user decides to quit the application, the WBS is saved back into the original data file complete with any changes that the user made to 
+the estimation (if any).
+
+Logging of exceptions and key operations of the application is present and is saved to a log file for evaluation if needed.
+
+
+
+** CRITERIA E - USE OF A STRATEGY METHOD  **
+
+In line with the assignment requirements, I have utilised a strategy method to model the estimation strategies required for the application which
+is exemplified by the interaction between the ConfigureEstimate class and the ReconcilliationStrategy interface, alongside its implementing classes,
+TakeHighestEstimate, TakeMedianEstimate, and DiscussAndReviseEstimate.
+
+The ReconcilliationStrategy is an interface which details a reconcile method which takes a list of integer estimates and a Scanner object as input 
+and returns an integer value representing the reconciled estimate. This method signature is common across all concrete strategy classes, ensuring 
+they can be used interchangeably by the context class (ConfigureEstimate).The ConfigureEstimate class uses an instance of ReconciliationStrategy 
+to perform the estimation, allowing for selection of the estimation strategy at runtime based on user input. 
+
+The three concrete strategies are:
+1. TakeHighestEstimate
+2. TakeMedianEstimate
+3. DiscussAndReviseEstimate
+
+Each of these strategies defines a specific algorithm for reconciling estimates. For example, TakeHighestEstimate selects the highest value from
+the list of estimates, TakeMedianEstimate calculates the median value, and DiscussAndReviseEstimate involves a discussion process to arrive at a 
+consensus estimate. Despite their differing internal logic, all classes adhere to the reconcile method signature defined in the 
+ReconciliationStrategy interface.
+
+The ConfigureEstimate class contains a reference to a ReconciliationStrategy object. While it does not perform estimate reconciliation itself, it 
+delegates this responsibility to the referenced strategy object. The ConfigureEstimate class has methods such as configure and estimateEffort 
+which allow for the dynamic setting and execution of the estimation strategy based on user input. When performing an estimation, it calls 
+the reconcile method on the currently set strategy object and processes its return value. 
+
+The reason I have employed such a strategy method is that it decouples the estimation process from the specific algorithms used to calculate the 
+estimates, making the application more modular. This separation of concerns ensures that changes to the estimation logic or the addition of new 
+strategies have minimal impact on the rest of the application. Having separate strategies also makes testing and debugging of the estimation methods
+much easier.
+
+
+
+** CRITERIA F - USE OF A COMPOSITE METHOD  **
+
+For modelling tasks and their behaviour, I utilised a composite method such that I could compose objects into tree structures to represent 
+part-whole hierarchies. This made more sense as the data file was in a hierachichal format as well.
+
+The Composite pattern in the WBS estimation application is applied through the Task abstract class and its subclasses LeafTask and CompoundTask.
+
+The LeafTask models tasks that do not have subtasks. It implements the display and serialize methods amongst other methods from the abstract 
+Task class to handle operations applicable to leaf objects. Should the program attempt to treat a LeafTask as a compound task 
+(e.g., calling add or getChild) it will result in an UnsupportedOperationException, as these operations are not applicable to leaf objects.
+
+The CompoundTask models tasks that can have their own subtasks. It overrides the add, remove, and getChild methods to manage its children (subtasks), 
+stored in a Task list. The display and serialize methods are implemented to recursively apply operations to its children, for uniformly treating
+compound and leaf nodes.
+
+The abstract Task class defines the interface for all objects in the composition, both composite and leaf nodes. While having class specific methods
+such as add, remove, and getChild, it also includes abstract methods such as display and serialize which the subclasses must implement, 
+for operations on objects regardless of their compound or leaf nature.
+
+One of the main reasons I employed a composite method for modelling the tasks is so that it allows treat individual tasks and tasks that have
+subtasks (compound) with uniformity and concretely differentiate tasks into compound tasks and leaf tasks simulating how a real WBS works making 
+it easier to maintain and adjust the code. It also allows me to display the task structure and calculate the effort of tasks through a single interface
+regardless of a tasks being leaf or compound. Furthermore, it allows me to serialize the task hierachy in a recursive manner so that I can accomodate 
+numerous nested tasks within a compound task should such a data file be used. 
+
+
+
+**  CONCLUDING THOUGHTS  **
+
+The assignment given is designed to test the correct usage of OOSE concepts which I believe to have applied successfully to the best of my ability.
+While improvements can undoubtably be made, I believe that I have employed good usage of containers, classes and adhered to the 4 core concepts of 
+OOSE. Furthemore, I have used both a strategy and composite design pattern which allows me to clearly represent the task hierachy in the WBS 
+estimation application and enabled efficient manipulation of task types and efforts.

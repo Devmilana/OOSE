@@ -1,0 +1,61 @@
+Apr 15, 2024 12:21:21 PM edu.curtin.app.WBSReader loadFromFile
+INFO: File: thefile.txt read successfully
+Apr 15, 2024 12:21:21 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:21:28 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 1: Estimate Effort
+
+Apr 15, 2024 12:21:42 PM edu.curtin.app.ConfigureEstimate estimateEffort
+INFO: User tried to assign effort to a CompoundTask with subtasks. Effort can only be assigned to leaf tasks.
+
+Apr 15, 2024 12:21:42 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:21:44 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 2: Configure
+
+Apr 15, 2024 12:21:51 PM edu.curtin.app.ConfigureEstimate configure
+INFO: User selected Take Highest Estimate strategy
+
+Apr 15, 2024 12:21:51 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:21:53 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 1: Estimate Effort
+
+Apr 15, 2024 12:22:03 PM edu.curtin.app.ConfigureEstimate estimateEffort
+INFO: Reconciled effort estimate is: 15 for task ID: A using TakeHighestEstimate strategy.
+
+Apr 15, 2024 12:22:03 PM edu.curtin.app.ConfigureEstimate updateTaskEffort
+INFO: Effort updated for task ID: A to 15
+
+Apr 15, 2024 12:22:03 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:22:14 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 1: Estimate Effort
+
+Apr 15, 2024 12:22:15 PM edu.curtin.app.ConfigureEstimate estimateEffort
+INFO: User entered ID not found
+
+Apr 15, 2024 12:22:15 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:22:20 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 1: Estimate Effort
+
+Apr 15, 2024 12:22:26 PM edu.curtin.app.ConfigureEstimate estimateEffort
+INFO: Reconciled effort estimate is: 10 for task ID: A using TakeHighestEstimate strategy.
+
+Apr 15, 2024 12:22:26 PM edu.curtin.app.ConfigureEstimate updateTaskEffort
+INFO: Effort updated for task ID: A to 10
+
+Apr 15, 2024 12:22:26 PM edu.curtin.app.WBSApp displayWBSData
+INFO: WBS Data displayed
+
+Apr 15, 2024 12:22:31 PM edu.curtin.app.WBSApp displayMainMenu
+INFO: User selected option 0: Quit WBS App
+
+Apr 15, 2024 12:22:31 PM edu.curtin.app.WBSSaver saveToFile
+INFO: Successfully saved WBS to file: thefile.txt
